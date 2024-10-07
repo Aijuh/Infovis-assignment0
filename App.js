@@ -1,5 +1,8 @@
+// A project for making 3x3 Tic-Tac-Toe game
+
 import { useState } from 'react';
 
+//  Rre-render when Square is clicked by calling handleClick at Board function
 function Square({ value, onSquareClick }) {
   return (
     <button className="square" onClick={onSquareClick}>
@@ -8,7 +11,11 @@ function Square({ value, onSquareClick }) {
   );
 }
 
+// The board object for Tic-Tac-Toe game
 function Board({ xIsNext, squares, onPlay }) {
+
+  // Called when Square object is clicked
+  // Changes Square object's value and Game object's state.
   function handleClick(i) {
     if (calculateWinner(squares) || squares[i]) {
       return;
@@ -22,6 +29,7 @@ function Board({ xIsNext, squares, onPlay }) {
     onPlay(nextSquares);
   }
 
+  // Calculates whether game ended.
   const winner = calculateWinner(squares);
   let status;
   if (winner) {
@@ -30,6 +38,7 @@ function Board({ xIsNext, squares, onPlay }) {
     status = 'Next player: ' + (xIsNext ? 'X' : 'O');
   }
 
+  // Define 3x3 Board object
   return (
     <>
       <div className="status">{status}</div>
@@ -52,22 +61,26 @@ function Board({ xIsNext, squares, onPlay }) {
   );
 }
 
+// Function for game system
 export default function Game() {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
 
+  // Updates history and currentMove
   function handlePlay(nextSquares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
   }
-
+  
+  // Jumps to next move
   function jumpTo(nextMove) {
     setCurrentMove(nextMove);
   }
 
+  // Prints history message and manages click
   const moves = history.map((squares, move) => {
     let description;
     if (move > 0) {
@@ -94,6 +107,7 @@ export default function Game() {
   );
 }
 
+// Calculate winner by inspect all possible Tic-Tac-Toe cases 
 function calculateWinner(squares) {
   const lines = [
     [0, 1, 2],
